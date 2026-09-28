@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Server 2022 — Midterm Flashcards (Multiple Choice)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            width: min(900px, 100%);
+            padding: 28px 20px 45px;
+        }
+
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .sub {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 auto 14px;
+            max-width: 700px;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .bar {
+            height: 5px;
+            background: #292929;
+            border-radius: 99px;
+            max-width: 700px;
+            margin: 0 auto 18px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: 0.2s;
+        }
+
+        .card-wrap {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #3a3a3a;
+            border-radius: 26px;
+            background: #202020;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45);
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #fff;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #1a1a1a;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #ddd;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-wrap: pretty;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: #2a2a2a;
+            border-color: #666;
+        }
+
+        .option-btn.correct {
+            background-color: #1a4d2e !important;
+            border-color: #2d7a4a !important;
+            color: #90ee90 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #4d1a1a !important;
+            border-color: #7a2d2d !important;
+            color: #ff6b6b !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .answer-display {
+            margin-top: 25px;
+            padding: 18px;
+            background: #242424;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .answer-display.show {
+            display: block;
+        }
+
+        .answer-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .answer-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #ddd;
+        }
+
+        .result-message {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .result-correct {
+            background: #1a4d2e;
+            color: #90ee90;
+        }
+
+        .result-incorrect {
+            background: #4d1a1a;
+            color: #ff6b6b;
+        }
+
+        .hint {
+            text-align: center;
+            color: #999;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            background: #181818;
+            color: #ddd;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #2a2a2a;
+            border-color: #666;
+        }
+
+        .btn.primary {
+            background: #0078d4;
+            border-color: #0078d4;
+            color: white;
+        }
+
+        .btn.primary:hover {
+            background: #005a9e;
+        }
+
+        .stats {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 18px;
+        }
+
+        kbd {
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 2px 5px;
+            color: #bbb;
+            font-family: monospace;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 14px;
+            color: #90ee90;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .app {
+                padding: 18px 12px;
+            }
+            .card-wrap {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 16px;
+            }
+            .option-btn {
+                font-size: 13px;
+                padding: 12px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h1>Windows Server 2022 — Flashcards (Multiple Choice)</h1>
+        <div class="sub">150 cards • Questions shuffle automatically • Test yourself with options</div>
+        
+        <div class="progress">
+            <span id="count">1 of 150</span>
+            <span id="score-badge">Score: 0/0</span>
+        </div>
+        
+        <div class="bar">
+            <div class="fill" id="fill"></div>
+        </div>
+
+        <div class="card-wrap">
+            <div class="question-section">
+                <div class="question-text" id="question"></div>
+                <div class="options-container" id="options"></div>
+                <div class="answer-display" id="answerDisplay">
+                    <div id="resultMessage"></div>
+                    <div class="answer-label">Full Answer:</div>
+                    <div class="answer-text" id="answerText"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hint">
+            Select an option to check your answer • Use <kbd>1-4</kbd> keys to select • <kbd>→</kbd> to continue
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="prev()">← Previous</button>
+            <button class="btn" onclick="shuffle()">🔀 Shuffle</button>
+            <button class="btn" onclick="next()">Next →</button>
+        </div>
+
+        <div class="score-display" id="scoreDisplay">Correct: 0 | Incorrect: 0</div>
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <script>
+        // Flashcard Database with Multiple Choice
+        const flashcardData = [
+            {
+                q: "What command is commonly used to perform Domain Controller diagnostic tests?",
+                options: ["nslookup", "dcdiag", "Get-Date", "ipconfig"],
+                answer: 1,
+                fullAnswer: "dcdiag is the appropriate command for diagnostic tests."
+            },
+            {
+                q: "What should be done when backups exist but have never been tested for restoration?",
+                options: ["Disabling network services", "Test the backup restoration procedures regularly", "Changing the desktop background", "Removing all user accounts"],
+                answer: 1,
+                fullAnswer: "Backup integrity and restoration procedures must be tested regularly."
+            },
+            {
+                q: "What principle states that users should receive only the permissions necessary to perform their assigned tasks?",
+                options: ["Network Dependency Principle", "Principle of Least Privilege", "Continuous Availability Principle", "Centralized Management Principle"],
+                answer: 1,
+                fullAnswer: "The Principle of Least Privilege is a fundamental security concept."
+            },
+            {
+                q: "What Windows Server feature can reduce downtime when applying certain supported security updates?",
+                options: ["Reverse Lookup", "NetBIOS", "Disk Management", "Hotpatching"],
+                answer: 3,
+                fullAnswer: "Hotpatching allows applying certain updates without reboot."
+            },
+            {
+                q: "Which combination is appropriate for managing Windows Server roles, browser-based monitoring, automation, and remote administration?",
+                options: ["PowerShell - Server Manager - DNS - BIOS", "MMC - DHCP - BIOS - Disk Cleanup", "Server Manager - Windows Admin Center - PowerShell - RSAT", "RSAT - Windows Setup - Event Viewer - Paint"],
+                answer: 2,
+                fullAnswer: "Server Manager + Windows Admin Center + PowerShell + RSAT."
+            },
+            {
+                q: "Why is it useful to configure a stable IP, install AD DS, promote the server, configure DNS, and verify the environment?",
+                options: ["It eliminates the need for DNS", "It focuses only on installation speed", "It combines preparation, deployment, service configuration, and verification rather than assuming installation alone means the environment works", "It makes Domain Controllers unnecessary"],
+                answer: 2,
+                fullAnswer: "This approach combines all essential steps for a reliable AD DS deployment."
+            },
+            {
+                q: "What responsibilities can a system administrator have in a hospital environment?",
+                options: ["Social media management", "Security, monitoring, backup, access management, and maintenance", "Game development and animation", "Graphic design and multimedia production"],
+                answer: 1,
+                fullAnswer: "System administrators manage critical infrastructure and security."
+            },
+            {
+                q: "Why should Domain Controllers normally have stable IP addresses?",
+                options: ["Global Catalog automatically fixes all network configuration problems", "Changing the server name would always solve the problem", "Domain Controllers do not require IP addresses", "DNS and service discovery depend on reliable addressing"],
+                answer: 3,
+                fullAnswer: "DNS and service discovery depend on reliable, stable IP addressing."
+            },
+            {
+                q: "Which Windows Server installation option is appropriate when a server is remotely managed and does not need a local graphical interface?",
+                options: ["Mobile OS", "Embedded OS", "Server Core", "Desktop Experience"],
+                answer: 2,
+                fullAnswer: "Server Core is ideal for remote management without GUI requirements."
+            },
+            {
+                q: "What is SYSVOL primarily used for?",
+                options: ["Hosting websites", "Sharing domain-wide files, including Group Policy-related data", "Storing only user passwords", "Storing personal photographs"],
+                answer: 1,
+                fullAnswer: "SYSVOL shares domain-wide files including Group Policy data."
+            },
+            {
+                q: "What operating-system function coordinates multiple programs running at the same time?",
+                options: ["File management", "Security management", "Device management", "Process management"],
+                answer: 3,
+                fullAnswer: "Process management/scheduling coordinates running programs."
+            },
+            {
+                q: "Which DNS component resolves a hostname into an IP address?",
+                options: ["SYSVOL", "Global Catalog", "Reverse Lookup Zone", "Forward Lookup Zone"],
+                answer: 3,
+                fullAnswer: "Forward Lookup Zone resolves names to IP addresses."
+            },
+            {
+                q: "What Active Directory structure lets administrators apply different policies to groups such as students, faculty, and administrators?",
+                options: ["Physical processors", "Reverse Lookup Zones", "Hyper-V containers", "Organizational Units"],
+                answer: 3,
+                fullAnswer: "Organizational Units (OUs) organize objects and apply Group Policy."
+            },
+            {
+                q: "What should be planned before deploying Windows Server 2022?",
+                options: ["Only the administrator's preferred browser", "Server name, IP configuration, disk layout, security, and backup strategy", "Only the keyboard layout", "Only the desktop wallpaper"],
+                answer: 1,
+                fullAnswer: "Comprehensive planning includes name, IP, disk, security, and backup strategy."
+            },
+            {
+                q: "Which command tests whether dc01.school.local can be resolved through DNS?",
+                options: ["dcdiag", "Get-Service", "nslookup", "hostname"],
+                answer: 2,
+                fullAnswer: "nslookup tests DNS name resolution."
+            },
+            {
+                q: "What should be considered when server storage is nearly full?",
+                options: ["The color of the GUI", "Storage growth and future capacity", "The number of desktop icons", "Only the current operating system size"],
+                answer: 1,
+                fullAnswer: "Plan for storage growth and future capacity requirements."
+            },
+            {
+                q: "Which is more appropriate for a secure data center server managed remotely: Server Core or Desktop Experience?",
+                options: ["Embedded OS, because it is designed for dedicated devices", "Desktop Experience, because every server requires a GUI", "Server Core, because a graphical desktop is unnecessary", "Mobile OS, because it uses fewer resources"],
+                answer: 2,
+                fullAnswer: "Server Core is appropriate when GUI is unnecessary for remote management."
+            },
+            {
+                q: "What is the primary purpose of Active Directory?",
+                options: ["To provide only internet access", "To replace the operating system", "To provide video editing services", "To centrally manage identities, computers, and network resources"],
+                answer: 3,
+                fullAnswer: "Active Directory centralizes management of identities and resources."
+            },
+            {
+                q: "Which Microsoft tool provides browser-based centralized management of Windows servers?",
+                options: ["BIOS Setup", "Windows Admin Center", "Command Prompt only", "Disk Management"],
+                answer: 1,
+                fullAnswer: "Windows Admin Center provides browser-based management."
+            },
+            {
+                q: "What is the strongest strategy for reducing errors when repeating the same configuration task across many servers?",
+                options: ["Allow each user to configure their own server", "Reinstall all servers", "Perform the task manually without documentation", "Use automation and appropriate administration tools"],
+                answer: 3,
+                fullAnswer: "Automation and tools reduce errors and increase consistency."
+            },
+            {
+                q: "Which component is associated with sharing Group Policy-related files among Domain Controllers?",
+                options: ["Hyper-V", "SYSVOL", "Reverse Lookup Zone", "Global Catalog"],
+                answer: 1,
+                fullAnswer: "SYSVOL shares Group Policy files among Domain Controllers."
+            },
+            {
+                q: "Why should a Windows Server deployment be evaluated beyond minimum CPU and RAM requirements?",
+                options: ["It only needs a larger monitor", "Production sizing must account for workload, storage, network traffic, and future growth", "It is sufficient as long as Desktop Experience is selected", "Minimum requirements are always enough"],
+                answer: 1,
+                fullAnswer: "Production sizing must account for actual workload and future growth."
+            },
+            {
+                q: "What is the security concern illustrated when users have access to services they do not need?",
+                options: ["There is no security concern", "It improves security", "Excessive privileges; Least Privilege should be applied", "It simplifies administration"],
+                answer: 2,
+                fullAnswer: "Excessive privileges violate the Principle of Least Privilege."
+            },
+            {
+                q: "If the laboratory domain is school.local, what NetBIOS name would normally be generated?",
+                options: ["SERVER", "SCHOOL.LOCAL", "LOCAL", "SCHOOL"],
+                answer: 3,
+                fullAnswer: "The NetBIOS name would be SCHOOL."
+            },
+            {
+                q: "What is a major benefit of automation in server administration?",
+                options: ["It prevents administrators from managing servers", "It saves time and reduces human error", "It reduces consistency", "It increases repetitive manual work"],
+                answer: 1,
+                fullAnswer: "Automation saves time and reduces human error significantly."
+            },
+            {
+                q: "If several applications compete for limited RAM, what should be investigated?",
+                options: ["DNS delegation", "User interface design", "File naming", "Memory management and memory utilization"],
+                answer: 3,
+                fullAnswer: "Investigate memory management and resource allocation."
+            },
+            {
+                q: "During a typical AD DS deployment, should DNS Server and Global Catalog be selected?",
+                options: ["Remove both and configure them later", "Select only Global Catalog and remove DNS", "Keep both selected", "Disable both"],
+                answer: 2,
+                fullAnswer: "For typical deployments, both DNS and Global Catalog should be selected."
+            },
+            {
+                q: "What responsibility is performed when recording IP addresses, network diagrams, backup schedules, and maintenance history?",
+                options: ["Process management", "Virtualization", "Documentation", "Application development"],
+                answer: 2,
+                fullAnswer: "Documentation preserves configuration knowledge and supports troubleshooting."
+            },
+            {
+                q: "What combination best supports efficient server management while minimizing repetitive tasks?",
+                options: ["Manual configuration without documentation", "PowerShell for automation and Windows Admin Center for centralized management", "Only a desktop operating system", "Only physical access to each server"],
+                answer: 1,
+                fullAnswer: "PowerShell automation + Windows Admin Center centralized management."
+            },
+            {
+                q: "What tool provides a browser-based dashboard to monitor Windows Server health and security?",
+                options: ["hostname", "Windows Admin Center", "nslookup", "MMC Event Viewer only"],
+                answer: 1,
+                fullAnswer: "Windows Admin Center provides browser-based monitoring dashboard."
+            },
+            {
+                q: "What administrative practice prevents employees from accessing confidential folders unrelated to their jobs?",
+                options: ["Disable user accounts", "Apply the Principle of Least Privilege", "Remove all shared folders", "Give all employees administrator privileges"],
+                answer: 1,
+                fullAnswer: "Apply the Principle of Least Privilege to restrict access."
+            },
+            {
+                q: "If CPU usage is normal but memory utilization is high and disk activity is excessive, what should be investigated?",
+                options: ["The administrator should immediately replace the network adapter", "The server should automatically be converted to Server Core", "Investigate memory and storage performance rather than assuming CPU is the problem", "DNS is always responsible for high disk activity"],
+                answer: 2,
+                fullAnswer: "Investigate memory and storage performance, not CPU."
+            },
+            {
+                q: "Which Windows Server installation option provides a traditional graphical interface?",
+                options: ["Server Core", "Desktop Experience", "Distributed OS", "Real-Time OS"],
+                answer: 1,
+                fullAnswer: "Desktop Experience includes the traditional GUI."
+            },
+            {
+                q: "Why is giving every employee full administrative privileges a security problem?",
+                options: ["The approach improves security", "The approach follows least privilege", "The approach is required for file sharing", "It creates unnecessary security risk and violates least-privilege principles"],
+                answer: 3,
+                fullAnswer: "Excessive admin privileges create unnecessary security risks."
+            },
+            {
+                q: "If DNS delegation cannot be created for an internal domain such as school.local, what should the administrator do?",
+                options: ["Remove Active Directory", "Leave Create DNS delegation unchecked", "Cancel the entire installation", "Check Create DNS delegation"],
+                answer: 1,
+                fullAnswer: "Leave Create DNS delegation unchecked for internal domains."
+            },
+            {
+                q: "If backups exist but have never been tested, what does that imply?",
+                options: ["Backups are unnecessary when antivirus is installed", "Backup creation alone guarantees recovery", "The problem is caused only by insufficient RAM", "Backup integrity and restoration procedures should be tested regularly"],
+                answer: 3,
+                fullAnswer: "Backups must be tested to ensure successful restoration."
+            },
+            {
+                q: "What type of DNS lookup resolves a hostname into an IP address?",
+                options: ["Domain lookup", "Reverse lookup", "Forward lookup", "Forest lookup"],
+                answer: 2,
+                fullAnswer: "Forward lookup resolves names to IP addresses."
+            },
+            {
+                q: "What is a likely consequence of not documenting server IP addresses, applications, backups, and configuration?",
+                options: ["Security risks disappear", "Knowledge transfer and maintenance become more difficult", "Troubleshooting becomes faster", "Server performance automatically improves"],
+                answer: 1,
+                fullAnswer: "Poor documentation makes maintenance and troubleshooting harder."
+            },
+            {
+                q: "What is the primary purpose of Windows Admin Center?",
+                options: ["Creating operating system installation media", "Replacing Active Directory", "Installing only desktop applications", "Centralized browser-based management of servers and computers"],
+                answer: 3,
+                fullAnswer: "Windows Admin Center provides centralized browser-based management."
+            },
+            {
+                q: "What is an efficient way to create accounts for hundreds of students?",
+                options: ["Create a new forest for every student", "Restart the Domain Controller repeatedly", "Use Reverse Lookup Zones", "Use PowerShell to automate account creation"],
+                answer: 3,
+                fullAnswer: "PowerShell automation is efficient for bulk account creation."
+            },
+            {
+                q: "What is a good general troubleshooting approach for a network service that stopped working?",
+                options: ["Immediately reinstall the operating system", "Replace all hardware immediately", "Identify the problem, gather information, determine causes, test solutions, and verify results", "Ignore the problem until users stop complaining"],
+                answer: 2,
+                fullAnswer: "Follow a systematic troubleshooting methodology."
+            },
+            {
+                q: "What happens when a server is promoted after installing AD DS?",
+                options: ["It creates a virtual machine automatically", "It turns the prepared server into a Domain Controller", "It converts the server into a client computer", "It removes DNS"],
+                answer: 1,
+                fullAnswer: "Promotion converts the server into a Domain Controller."
+            },
+            {
+                q: "What is an efficient approach for repeatedly creating hundreds of student accounts?",
+                options: ["Creating each account through separate GUI windows only", "Reinstalling Windows Server", "Using PowerShell automation", "Restarting the server after every account"],
+                answer: 2,
+                fullAnswer: "PowerShell automation is the efficient approach."
+            },
+            {
+                q: "What is the role of the Global Catalog?",
+                options: ["It provides a searchable partial representation of objects across the forest", "It installs Windows Server", "It replaces the Domain Controller", "It assigns IP addresses to clients"],
+                answer: 0,
+                fullAnswer: "The Global Catalog provides searchable object representations."
+            },
+            {
+                q: "What responsibility is demonstrated by checking server health, running services, and recent events?",
+                options: ["Software development", "Graphic design", "Database programming only", "Performance monitoring and troubleshooting"],
+                answer: 3,
+                fullAnswer: "This demonstrates performance monitoring and troubleshooting."
+            },
+            {
+                q: "What is Active Directory Domain Services (AD DS)?",
+                options: ["A hardware virtualization processor", "A type of network cable", "A Windows Server role that provides directory services", "A desktop application"],
+                answer: 2,
+                fullAnswer: "AD DS is a Windows Server role providing directory services."
+            },
+            {
+                q: "What technology allows administrators to manage Active Directory from a Windows client without logging directly into the server?",
+                options: ["Remote Server Administration Tools (RSAT)", "Windows Setup", "BIOS", "Server Core"],
+                answer: 0,
+                fullAnswer: "RSAT enables remote administration from a client."
+            },
+            {
+                q: "Which Windows Server installation option provides a traditional graphical user interface?",
+                options: ["Command Server", "Minimal Core", "Server Core", "Desktop Experience"],
+                answer: 3,
+                fullAnswer: "Desktop Experience provides the traditional GUI."
+            },
+            {
+                q: "What minimum system partition size is identified in Windows Server 2022 material?",
+                options: ["64 GB", "24 GB", "32 GB", "16 GB"],
+                answer: 2,
+                fullAnswer: "The minimum system partition size is 32 GB."
+            },
+            {
+                q: "What is DNS?",
+                options: ["A desktop application", "The Domain Name System which translates names into IP addresses", "A backup service", "A security protocol"],
+                answer: 1,
+                fullAnswer: "DNS translates hostnames into IP addresses."
+            },
+            {
+                q: "What is DHCP used for?",
+                options: ["Creating virtual machines", "Automatically assigning IP configuration to clients", "Storing user passwords", "Managing printers only"],
+                answer: 1,
+                fullAnswer: "DHCP automatically assigns IP configuration to clients."
+            },
+            {
+                q: "What is a Domain Controller?",
+                options: ["A client computer", "A workstation", "A server running AD DS that authenticates users and provides directory services", "A type of printer"],
+                answer: 2,
+                fullAnswer: "A Domain Controller runs AD DS and provides authentication."
+            },
+            {
+                q: "What is a forest in Active Directory?",
+                options: ["A collection of trees", "A type of server", "The top-level logical structure containing domains", "A backup system"],
+                answer: 2,
+                fullAnswer: "A forest is the top-level AD structure."
+            },
+            {
+                q: "What is an Active Directory domain?",
+                options: ["A website", "A network cable type", "A logical boundary containing users, computers, and groups", "An application"],
+                answer: 2,
+                fullAnswer: "A domain is a logical administrative boundary."
+            },
+            {
+                q: "What is an Organizational Unit?",
+                options: ["A physical location", "A type of server", "A container for organizing objects and applying Group Policy", "A backup method"],
+                answer: 2,
+                fullAnswer: "OUs organize objects and apply Group Policy."
+            },
+            {
+                q: "What is Group Policy?",
+                options: ["A social network policy", "A feature for centrally configuring user and computer settings", "A backup method", "A DNS record type"],
+                answer: 1,
+                fullAnswer: "Group Policy centrally configures settings."
+            },
+            {
+                q: "What is the Global Catalog used for?",
+                options: ["Storing passwords", "Fast searching across the forest", "Installing software", "Managing backups"],
+                answer: 1,
+                fullAnswer: "The Global Catalog enables fast forest-wide searches."
+            },
+            {
+                q: "What is SYSVOL?",
+                options: ["A type of disk", "A backup location", "A special shared folder storing domain-wide files", "An application"],
+                answer: 2,
+                fullAnswer: "SYSVOL stores domain-wide files including Group Policy data."
+            },
+            {
+                q: "What is a Forward Lookup Zone?",
+                options: ["A reverse DNS zone", "A DNS zone for resolving names to IP addresses", "A backup zone", "An application"],
+                answer: 1,
+                fullAnswer: "Forward Lookup resolves names to IP addresses."
+            },
+            {
+                q: "What is a Reverse Lookup Zone?",
+                options: ["A forward DNS zone", "A DNS zone for resolving IP addresses to names", "A backup zone", "An application"],
+                answer: 1,
+                fullAnswer: "Reverse Lookup resolves IP addresses to names."
+            },
+            {
+                q: "What command displays detailed IP configuration information?",
+                options: ["ping", "ipconfig /all", "nslookup", "tracert"],
+                answer: 1,
+                fullAnswer: "ipconfig /all displays detailed IP configuration."
+            },
+            {
+                q: "What command refreshes DHCP-assigned IP configuration?",
+                options: ["ping", "ipconfig /release and ipconfig /renew", "nslookup", "hostname"],
+                answer: 1,
+                fullAnswer: "/release and /renew refresh DHCP configuration."
+            },
+            {
+                q: "What command tests network reachability?",
+                options: ["nslookup", "ping", "tracert", "ipconfig"],
+                answer: 1,
+                fullAnswer: "ping tests network reachability to a host."
+            },
+            {
+                q: "What command displays DNS query information?",
+                options: ["ping", "ipconfig", "nslookup", "tracert"],
+                answer: 2,
+                fullAnswer: "nslookup displays DNS query information."
+            },
+            {
+                q: "What command displays the path packets take to a destination?",
+                options: ["ping", "ipconfig", "nslookup", "tracert"],
+                answer: 3,
+                fullAnswer: "tracert displays the path to a destination."
+            },
+            {
+                q: "What is PowerShell?",
+                options: ["A social media app", "A command-line shell and scripting language for automation", "A web browser", "A game engine"],
+                answer: 1,
+                fullAnswer: "PowerShell is a command-line shell for system automation."
+            },
+            {
+                q: "Why is PowerShell useful for server administration?",
+                options: ["It provides only visual tools", "It automates tasks, manages configurations, and handles objects consistently", "It is only for programmers", "It replaces all GUI tools"],
+                answer: 1,
+                fullAnswer: "PowerShell enables automation and consistent management."
+            },
+            {
+                q: "What is Server Manager?",
+                options: ["A user management tool", "A Windows Server tool for installing roles/features and managing servers", "A backup tool", "A web server"],
+                answer: 1,
+                fullAnswer: "Server Manager installs roles/features and manages servers."
+            },
+            {
+                q: "What is Windows Admin Center?",
+                options: ["A text editor", "A browser-based management platform for servers and PCs", "A backup tool", "A firewall"],
+                answer: 1,
+                fullAnswer: "Windows Admin Center is a browser-based management platform."
+            },
+            {
+                q: "What is RSAT?",
+                options: ["A backup tool", "Remote Server Administration Tools for remotely managing server roles", "A firewall", "An email client"],
+                answer: 1,
+                fullAnswer: "RSAT provides tools for remote server administration."
+            },
+            {
+                q: "What is Server Core?",
+                options: ["A web server", "A minimal installation without the graphical desktop", "A database server", "A file server"],
+                answer: 1,
+                fullAnswer: "Server Core is a minimal installation without GUI."
+            },
+            {
+                q: "What is Desktop Experience?",
+                options: ["A web browser", "A Windows Server installation with the traditional GUI", "A text editor", "A backup tool"],
+                answer: 1,
+                fullAnswer: "Desktop Experience includes the traditional graphical interface."
+            },
+            {
+                q: "When is Server Core especially useful?",
+                options: ["For desktop users", "When administered remotely and GUI is not required", "For web browsers only", "For graphic designers"],
+                answer: 1,
+                fullAnswer: "Server Core is useful for remote administration without GUI needs."
+            },
+            {
+                q: "What is virtualization?",
+                options: ["Creating backup copies", "Running virtual machines on a physical host", "Backing up data", "Creating new users"],
+                answer: 1,
+                fullAnswer: "Virtualization runs virtual machines on a host."
+            },
+            {
+                q: "What is capacity planning?",
+                options: ["Creating user accounts", "Planning resources for current and future workload", "Backing up data", "Managing security"],
+                answer: 1,
+                fullAnswer: "Capacity planning accounts for workload and growth."
+            },
+            {
+                q: "Why is documentation important for system administrators?",
+                options: ["It is not important", "It preserves knowledge and supports troubleshooting", "It slows down work", "It is only for beginners"],
+                answer: 1,
+                fullAnswer: "Documentation preserves knowledge and enables maintenance."
+            },
+            {
+                q: "What is backup?",
+                options: ["A new installation", "A separate copy of data for recovery", "A security update", "A type of server"],
+                answer: 1,
+                fullAnswer: "A backup is a copy of data for recovery after loss."
+            },
+            {
+                q: "Why must backups be tested?",
+                options: ["They are not important", "To ensure data can actually be restored", "Only for compliance", "To create more backups"],
+                answer: 1,
+                fullAnswer: "Testing ensures backups can actually restore data."
+            },
+            {
+                q: "What is disaster recovery?",
+                options: ["Preventing disasters", "Planning for and restoring systems after major failures", "Creating backups only", "Installing new software"],
+                answer: 1,
+                fullAnswer: "Disaster recovery plans for system restoration."
+            },
+            {
+                q: "What is high availability?",
+                options: ["Having more servers than needed", "Designing systems to remain available despite failures", "Backup only", "Security policies"],
+                answer: 1,
+                fullAnswer: "High availability means minimal downtime despite failures."
+            },
+            {
+                q: "What is fault tolerance?",
+                options: ["Accepting system failures", "Systems continuing despite component failures", "Preventing all failures", "Backup procedures"],
+                answer: 1,
+                fullAnswer: "Fault tolerance allows continued operation despite failures."
+            },
+            {
+                q: "What is a single point of failure?",
+                options: ["Multiple redundant systems", "A component whose failure causes total service failure", "A backup system", "A security measure"],
+                answer: 1,
+                fullAnswer: "A single point of failure causes total service loss."
+            },
+            {
+                q: "What is least privilege?",
+                options: ["Giving everyone admin rights", "Giving users only permissions they need", "No security policies", "Maximum access for all"],
+                answer: 1,
+                fullAnswer: "Least privilege restricts access to only needed permissions."
+            },
+            {
+                q: "Why should administrator privileges be limited?",
+                options: ["They should not be limited", "Excessive privileges increase risk of mistakes and damage", "Privileges should be unlimited", "Only for compliance"],
+                answer: 1,
+                fullAnswer: "Limited admin privileges reduce security risks."
+            },
+            {
+                q: "What is authentication?",
+                options: ["Assigning permissions", "Verifying a user's identity", "Creating backups", "Installing software"],
+                answer: 1,
+                fullAnswer: "Authentication verifies user identity."
+            },
+            {
+                q: "What is authorization?",
+                options: ["Verifying identity", "Determining what authenticated users can access", "Creating accounts", "Installing software"],
+                answer: 1,
+                fullAnswer: "Authorization determines permitted access levels."
+            },
+            {
+                q: "What is an access control list (ACL)?",
+                options: ["A user directory", "Permissions specifying what users can access", "A type of file", "A backup location"],
+                answer: 1,
+                fullAnswer: "An ACL lists permissions for users and groups."
+            },
+            {
+                q: "What is monitoring?",
+                options: ["Restarting servers", "Collecting and reviewing system information to detect issues", "Backing up data", "Creating user accounts"],
+                answer: 1,
+                fullAnswer: "Monitoring observes system condition and detects problems."
+            },
+            {
+                q: "What is troubleshooting?",
+                options: ["Preventing all problems", "Identifying and resolving identified problems systematically", "Backing up data", "Installing updates"],
+                answer: 1,
+                fullAnswer: "Troubleshooting identifies and resolves problems."
+            },
+            {
+                q: "What is Event Viewer used for?",
+                options: ["Web browsing", "Viewing Windows event logs for monitoring", "Editing documents", "Creating spreadsheets"],
+                answer: 1,
+                fullAnswer: "Event Viewer displays Windows event logs."
+            },
+            {
+                q: "What is Disk Management used for?",
+                options: ["Web browsing", "Managing disks, partitions, and volumes", "Editing documents", "Creating backups"],
+                answer: 1,
+                fullAnswer: "Disk Management manages disks and partitions."
+            },
+            {
+                q: "What is a Windows Server role?",
+                options: ["A user account", "A major server function like AD DS or DNS", "A user group", "A backup strategy"],
+                answer: 1,
+                fullAnswer: "A role is a major server function that can be installed."
+            },
+            {
+                q: "What is a Windows Server feature?",
+                options: ["A role", "An additional software component supporting server functionality", "A backup", "A user account"],
+                answer: 1,
+                fullAnswer: "A feature extends Windows Server functionality."
+            },
+            {
+                q: "What does AD DS stand for?",
+                options: ["Administrative Data Source", "Active Directory Domain Services", "Application Development System", "Automated Directory Storage"],
+                answer: 1,
+                fullAnswer: "AD DS stands for Active Directory Domain Services."
+            },
+            {
+                q: "What does DNS stand for?",
+                options: ["Data Name System", "Domain Name System", "Database Naming Service", "Digital Network System"],
+                answer: 1,
+                fullAnswer: "DNS stands for Domain Name System."
+            },
+            {
+                q: "What does DHCP stand for?",
+                options: ["Dynamic Host Configuration Protocol", "Direct Hardware Connection Protocol", "Digital Host Control Protocol", "Dynamic Hardware Configuration Process"],
+                answer: 0,
+                fullAnswer: "DHCP stands for Dynamic Host Configuration Protocol."
+            },
+            {
+                q: "What does SYSVOL stand for?",
+                options: ["System Database", "System Volume", "System Virtual Object Library", "System Virtual Online Library"],
+                answer: 1,
+                fullAnswer: "SYSVOL stands for System Volume."
+            },
+            {
+                q: "What does RSAT stand for?",
+                options: ["Remote System Administration Tool", "Remote Server Administration Tools", "Remote System Automation Toolkit", "Remote Server Automation Tools"],
+                answer: 1,
+                fullAnswer: "RSAT stands for Remote Server Administration Tools."
+            },
+            {
+                q: "What does GUI stand for?",
+                options: ["General User Interface", "Graphical User Interface", "Global Unified Interface", "General Unified Interface"],
+                answer: 1,
+                fullAnswer: "GUI stands for Graphical User Interface."
+            },
+            {
+                q: "What does IP stand for?",
+                options: ["Information Protocol", "Internet Protocol", "Internal Protocol", "Internet Process"],
+                answer: 1,
+                fullAnswer: "IP stands for Internet Protocol."
+            },
+            {
+                q: "What does NetBIOS name refer to in an AD domain?",
+                options: ["A new DNS name", "The legacy-style short name limited to 15 characters", "A type of computer", "A backup location"],
+                answer: 1,
+                fullAnswer: "NetBIOS name is the legacy domain name."
+            },
+            {
+                q: "What is a hostname?",
+                options: ["A network location", "A name assigned to a device on a network", "A type of server", "A backup name"],
+                answer: 1,
+                fullAnswer: "A hostname identifies a device on a network."
+            },
+            {
+                q: "Why should a server name be planned before deployment?",
+                options: ["It does not matter", "Consistent naming supports identification and administration", "Only for compliance", "For aesthetics only"],
+                answer: 1,
+                fullAnswer: "Planning server names supports proper identification and management."
+            },
+            {
+                q: "What is an IP address?",
+                options: ["A user account", "A numerical address identifying a device on a network", "A DNS name", "A backup location"],
+                answer: 1,
+                fullAnswer: "An IP address identifies a device on an IP network."
+            },
+            {
+                q: "What is a static IP address?",
+                options: ["A temporary IP", "An IP address configured to remain consistent", "A dynamic IP", "A backup IP"],
+                answer: 1,
+                fullAnswer: "A static IP remains the same rather than being assigned dynamically."
+            },
+            {
+                q: "Why are static IP addresses important for many servers?",
+                options: ["They are not important", "DNS and Active Directory depend on reliable addressing", "Only for backups", "For appearance only"],
+                answer: 1,
+                fullAnswer: "Static IPs ensure reliable service discovery and DNS."
+            },
+            {
+                q: "What is a DNS record?",
+                options: ["A backup file", "An entry mapping a name to information like an IP", "A user account", "A log file"],
+                answer: 1,
+                fullAnswer: "A DNS record maps names to information."
+            },
+            {
+                q: "What is an A record?",
+                options: ["A backup record", "A DNS record mapping hostname to IPv4 address", "A user account", "An IPv6 record"],
+                answer: 1,
+                fullAnswer: "An A record maps hostnames to IPv4 addresses."
+            },
+            {
+                q: "What is an AAAA record?",
+                options: ["A backup record", "A DNS record mapping hostname to IPv6 address", "A user account", "An IPv4 record"],
+                answer: 1,
+                fullAnswer: "An AAAA record maps hostnames to IPv6 addresses."
+            },
+            {
+                q: "What is a PTR record?",
+                options: ["A backup record", "A DNS record for reverse DNS mapping", "A user account", "A forward record"],
+                answer: 1,
+                fullAnswer: "A PTR record is used for reverse DNS lookups."
+            },
+            {
+                q: "What is a DNS delegation?",
+                options: ["Assigning user permissions", "Delegating DNS authority to another server", "Creating backups", "Installing software"],
+                answer: 1,
+                fullAnswer: "DNS delegation delegates authority to another DNS server."
+            },
+            {
+                q: "When might DNS delegation be unnecessary for an internal AD domain?",
+                options: ["Always unnecessary", "When the domain does not need external delegation", "For all domains", "Only for backups"],
+                answer: 1,
+                fullAnswer: "Internal domains may not need external delegation."
+            },
+            {
+                q: "What is a domain administrator?",
+                options: ["A regular user", "An account with admin privileges across the domain", "A type of computer", "A backup account"],
+                answer: 1,
+                fullAnswer: "A domain administrator has domain-wide admin privileges."
+            },
+            {
+                q: "What is a user account?",
+                options: ["A computer", "An identity for authentication and resource access", "A server", "A backup"],
+                answer: 1,
+                fullAnswer: "A user account enables authentication and access."
+            },
+            {
+                q: "What is a security group?",
+                options: ["A type of folder", "A group for organizing accounts and assigning permissions", "A type of server", "A backup method"],
+                answer: 1,
+                fullAnswer: "A security group organizes accounts for permissions."
+            },
+            {
+                q: "What is a computer account in Active Directory?",
+                options: ["A user account", "A directory object representing a domain-joined computer", "A backup", "A type of server"],
+                answer: 1,
+                fullAnswer: "A computer account represents a domain-joined computer."
+            },
+            {
+                q: "What is a domain join?",
+                options: ["Creating a backup", "Connecting a computer to an AD domain for centralized management", "Installing software", "Creating a user account"],
+                answer: 1,
+                fullAnswer: "Domain join connects a computer to the domain."
+            },
+            {
+                q: "What is a service account?",
+                options: ["A regular user account", "An account used by applications/services for authentication", "A backup account", "A shared account"],
+                answer: 1,
+                fullAnswer: "A service account enables application/service authentication."
+            },
+            {
+                q: "What is automation?",
+                options: ["Manual work", "Using scripts/tools for consistent automated tasks", "Backup only", "Security policies"],
+                answer: 1,
+                fullAnswer: "Automation uses tools for consistent task execution."
+            },
+            {
+                q: "What are the main benefits of automation?",
+                options: ["Slower work", "Time savings, consistency, scalability, and reduced error", "More manual work", "Complexity only"],
+                answer: 1,
+                fullAnswer: "Automation saves time and improves consistency."
+            },
+            {
+                q: "Why is manual configuration across many servers risky?",
+                options: ["It is not risky", "It is repetitive and prone to errors and inconsistencies", "It is always safe", "No concerns"],
+                answer: 1,
+                fullAnswer: "Manual configuration is repetitive and error-prone."
+            },
+            {
+                q: "What is configuration management?",
+                options: ["User management", "Managing configurations consistently across systems", "Backup only", "Security only"],
+                answer: 1,
+                fullAnswer: "Configuration management maintains consistent settings."
+            },
+            {
+                q: "What is a management tool?",
+                options: ["A type of server", "Software for configuring, monitoring, and administering systems", "A backup tool", "A firewall"],
+                answer: 1,
+                fullAnswer: "A management tool enables system administration."
+            },
+            {
+                q: "What is a browser-based administration tool?",
+                options: ["A web browser", "A management interface accessed through a web browser", "A backup tool", "A firewall"],
+                answer: 1,
+                fullAnswer: "Browser-based tools enable administration via web interface."
+            },
+            {
+                q: "What is remote administration?",
+                options: ["Local administration only", "Managing systems from another device rather than directly", "Manual work only", "Backup administration"],
+                answer: 1,
+                fullAnswer: "Remote administration manages systems from a distance."
+            },
+            {
+                q: "Why is remote administration useful?",
+                options: ["It is not useful", "Administrators can manage without traveling to each server", "Only for backups", "Only locally"],
+                answer: 1,
+                fullAnswer: "Remote administration eliminates travel requirements."
+            },
+            {
+                q: "What is a log?",
+                options: ["A type of file only", "A recorded history of system, application, or security events", "A backup", "A user account"],
+                answer: 1,
+                fullAnswer: "A log records system events and activities."
+            },
+            {
+                q: "Why are logs important in troubleshooting?",
+                options: ["They are not important", "They provide evidence of what happened before/during/after problems", "Only for compliance", "Backup only"],
+                answer: 1,
+                fullAnswer: "Logs provide crucial troubleshooting evidence."
+            },
+            {
+                q: "What is performance monitoring?",
+                options: ["Creating backups", "Tracking CPU, memory, disk, and network usage", "Installing updates", "User management"],
+                answer: 1,
+                fullAnswer: "Performance monitoring tracks resource usage."
+            },
+            {
+                q: "What does high memory utilization suggest investigating?",
+                options: ["The network", "Memory demand and applications using RAM", "Only backups", "User accounts"],
+                answer: 1,
+                fullAnswer: "High memory suggests memory demand investigation."
+            },
+            {
+                q: "What does high disk activity suggest investigating?",
+                options: ["The network only", "Storage performance, I/O workload, and applications", "Only backups", "User accounts"],
+                answer: 1,
+                fullAnswer: "High disk activity requires storage performance investigation."
+            },
+            {
+                q: "Why should production sizing consider future growth?",
+                options: ["It should not", "Current needs will likely be inadequate with growth", "Only for today", "Size is fixed"],
+                answer: 1,
+                fullAnswer: "Sizing must account for future workload growth."
+            },
+            {
+                q: "What is a minimum requirement?",
+                options: ["The recommended size", "The lowest specification for supported operation", "The maximum size", "A suggestion"],
+                answer: 1,
+                fullAnswer: "Minimum requirements indicate basic support level."
+            },
+            {
+                q: "Why are minimum requirements not the same as production sizing?",
+                options: ["They are the same", "Minimum is basic, production must handle actual workload/growth", "No difference exists", "For compliance only"],
+                answer: 1,
+                fullAnswer: "Minimum is basic; production requires actual workload planning."
+            },
+            {
+                q: "What is a backup schedule?",
+                options: ["A calendar", "A planned timetable for performing backups", "A user account", "A server type"],
+                answer: 1,
+                fullAnswer: "A backup schedule specifies when backups occur."
+            },
+            {
+                q: "What is maintenance history?",
+                options: ["A news report", "A record of changes, updates, and maintenance performed", "A backup", "A user account"],
+                answer: 1,
+                fullAnswer: "Maintenance history records system changes."
+            },
+            {
+                q: "Why document network diagrams?",
+                options: ["They are not important", "They help understand connectivity and troubleshoot issues", "Only for aesthetics", "For compliance only"],
+                answer: 1,
+                fullAnswer: "Network diagrams aid troubleshooting and understanding."
+            },
+            {
+                q: "What is a network diagram?",
+                options: ["A picture only", "A visual representation of devices and connections", "A backup", "A user account"],
+                answer: 1,
+                fullAnswer: "A network diagram shows network topology."
+            },
+            {
+                q: "What is a role-based approach to administration?",
+                options: ["Giving everyone the same permissions", "Assigning responsibilities based on job functions", "No role definition", "For compliance only"],
+                answer: 1,
+                fullAnswer: "Role-based approach assigns duties by job function."
+            },
+            {
+                q: "Why should administrators avoid giving everyone full admin rights?",
+                options: ["It is necessary", "Most do not need them and risks increase", "Everyone requires admin", "For ease only"],
+                answer: 1,
+                fullAnswer: "Unlimited admin rights create unnecessary security risks."
+            },
+            {
+                q: "What is centralized management?",
+                options: ["Local management only", "Managing multiple systems from a central platform", "Distributed only", "No management"],
+                answer: 1,
+                fullAnswer: "Centralized management controls multiple systems from one point."
+            },
+            {
+                q: "Why is centralized management useful for multiple servers?",
+                options: ["It is not useful", "It reduces repetitive work and ensures consistency", "Only for backups", "No benefits"],
+                answer: 1,
+                fullAnswer: "Centralization reduces work and ensures consistency."
+            },
+            {
+                q: "What is the difference between forward and reverse DNS lookup?",
+                options: ["No difference", "Forward maps names to IPs; Reverse maps IPs to names", "Same operation", "Not related"],
+                answer: 1,
+                fullAnswer: "Forward resolves names to IPs; Reverse resolves IPs to names."
+            },
+            {
+                q: "What is the difference between Server Core and Desktop Experience?",
+                options: ["No difference", "Core lacks GUI; Desktop includes traditional interface", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "Core is minimal; Desktop includes GUI."
+            },
+            {
+                q: "What is the difference between authentication and authorization?",
+                options: ["No difference", "Authentication verifies identity; Authorization determines access", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "Authentication verifies who; Authorization determines access."
+            },
+            {
+                q: "What is the difference between a backup and a restore?",
+                options: ["No difference", "Backup is saved copy; Restore is recovering from backup", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "Backup creates copy; Restore recovers from backup."
+            },
+            {
+                q: "What is the difference between monitoring and troubleshooting?",
+                options: ["No difference", "Monitoring observes; Troubleshooting resolves problems", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "Monitoring observes; Troubleshooting resolves issues."
+            },
+            {
+                q: "What is the difference between an OU and a security group?",
+                options: ["No difference", "OU organizes objects and applies policy; Group assigns permissions", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "OU organizes; Group manages permissions."
+            },
+            {
+                q: "What is the difference between a domain and a forest?",
+                options: ["No difference", "Domain is boundary; Forest is top-level structure", "Same thing", "Not related"],
+                answer: 1,
+                fullAnswer: "Domain is administrative boundary; Forest is top-level structure."
+            }
+        ];
+
+        // State variables
+        let currentIndex = 0;
+        let answered = false;
+        let correctCount = 0;
+        let incorrectCount = 0;
+
+        /**
+         * Render the current flashcard
+         */
+        function render() {
+            const card = flashcardData[currentIndex];
+            document.getElementById('question').textContent = card.q;
+            document.getElementById('count').textContent = `${currentIndex + 1} of ${flashcardData.length}`;
+            document.getElementById('fill').style.width = `${((currentIndex + 1) / flashcardData.length) * 100}%`;
+            document.getElementById('scoreDisplay').textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+            document.getElementById('score-badge').textContent = `Score: ${correctCount}/${correctCount + incorrectCount}`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            answered = false;
+            document.getElementById('answerDisplay').classList.remove('show');
+
+            card.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                btn.onclick = () => selectOption(index);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        /**
+         * Handle option selection
+         */
+        function selectOption(index) {
+            if (answered) return;
+
+            answered = true;
+            const card = flashcardData[currentIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            const isCorrect = index === card.answer;
+
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === card.answer) {
+                    btn.classList.add('correct');
+                } else if (i === index && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (isCorrect) {
+                correctCount++;
+            } else {
+                incorrectCount++;
+            }
+
+            // Show answer
+            const answerDisplay = document.getElementById('answerDisplay');
+            const resultMessage = document.getElementById('resultMessage');
+            resultMessage.innerHTML = isCorrect 
+                ? '<div class="result-message result-correct">✓ Correct!</div>'
+                : '<div class="result-message result-incorrect">✗ Incorrect!</div>';
+            document.getElementById('answerText').textContent = card.fullAnswer;
+            answerDisplay.classList.add('show');
+
+            document.getElementById('scoreDisplay').textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+            document.getElementById('score-badge').textContent = `Score: ${correctCount}/${correctCount + incorrectCount}`;
+        }
+
+        /**
+         * Move to next card
+         */
+        function next() {
+            currentIndex = (currentIndex + 1) % flashcardData.length;
+            render();
+        }
+
+        /**
+         * Move to previous card
+         */
+        function prev() {
+            currentIndex = (currentIndex - 1 + flashcardData.length) % flashcardData.length;
+            render();
+        }
+
+        /**
+         * Shuffle cards and reset tracking
+         */
+        function shuffle() {
+            for (let j = flashcardData.length - 1; j > 0; j--) {
+                const k = Math.floor(Math.random() * (j + 1));
+                [flashcardData[j], flashcardData[k]] = [flashcardData[k], flashcardData[j]];
+            }
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            render();
+        }
+
+        /**
+         * Keyboard shortcuts
+         */
+        document.addEventListener('keydown', (event) => {
+            if (!answered) {
+                // Number keys 1-4 for selecting options
+                if (event.key >= '1' && event.key <= '4') {
+                    const index = parseInt(event.key) - 1;
+                    if (index < flashcardData[currentIndex].options.length) {
+                        selectOption(index);
+                    }
+                }
+            }
+            if (event.key === 'ArrowRight') {
+                next();
+            }
+            if (event.key === 'ArrowLeft') {
+                prev();
+            }
+        });
+
+        // Initialize on page load with randomized question order
+        shuffle();
+    </script>
+</body>
+</html>
